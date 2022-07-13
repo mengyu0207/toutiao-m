@@ -1,0 +1,67 @@
+@font-face {
+  font-family: "toutiao"; /* Project id 3517446 */
+  src: url('iconfont.woff2?t=1657619816436') format('woff2'),
+       url('iconfont.woff?t=1657619816436') format('woff'),
+       url('iconfont.ttf?t=1657619816436') format('truetype');
+}
+
+.toutiao {
+  font-family: "toutiao" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.toutiao-shoucang:before {
+  content: "\e601";
+}
+
+.toutiao-guanbi:before {
+  content: "\e602";
+}
+
+.toutiao-youjiantou:before {
+  content: "\e603";
+}
+
+.toutiao-sousuo:before {
+  content: "\e604";
+}
+
+.toutiao-shouji:before {
+  content: "\e605";
+}
+
+.toutiao-shouye:before {
+  content: "\e606";
+}
+
+.toutiao-zuopin:before {
+  content: "\e607";
+}
+
+.toutiao-lishi:before {
+  content: "\e608";
+}
+
+.toutiao-yanzhengma:before {
+  content: "\e609";
+}
+
+.toutiao-shipin:before {
+  content: "\e60a";
+}
+
+.toutiao-wode:before {
+  content: "\e60b";
+}
+
+.toutiao-fenxiang:before {
+  content: "\e60c";
+}
+
+.toutiao-yuedu:before {
+  content: "\e60d";
+}
+
