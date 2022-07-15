@@ -8,6 +8,10 @@ const routes = [
     path: '/login',
     name: 'login',
     component: () => import('@/views/login') // 路由懒加载，到那个页面加载那个页面
+  },
+  {
+    path: '/profile',
+    component: () => import('@/views/profile')
   }
 ]
 

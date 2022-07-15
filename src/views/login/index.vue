@@ -8,12 +8,12 @@
     >
       <template #left><van-icon name="cross" /></template>
     </van-nav-bar>
-    <van-form @submit="login" class="form">
+    <van-form @submit="login" ref="form" class="loginForm">
       <van-field
         v-model="mobile"
-        name="用户名"
+        name="mobile"
         placeholder="请输入手机号"
-        :rules="[{ required: true, message: '请填写用户名' }]"
+        :rules="mobileRules"
       >
         <template #label>
           <span class="toutiao toutiao-shouji"></span>
@@ -23,15 +23,23 @@
         class="form"
         v-model="code"
         type="text"
-        name="密码"
+        name="code"
         placeholder="请输入验证码"
-        :rules="[{ required: true, message: '请填写密码' }]"
+        :rules="codeRules"
       >
         <template #label>
           <span class="toutiao toutiao-yanzhengma"></span>
         </template>
         <template #right-icon>
-          <van-button class="CodeBtn" round size="mini">发送验证码</van-button>
+          <van-count-down
+            :time="1000 * 3"
+            v-if="isShowDown"
+            format="ss s"
+            @finish="isShowDown = false"
+          />
+          <van-button v-else class="CodeBtn" round size="mini" @click="SendCode"
+            >发送验证码</van-button
+          >
         </template>
       </van-field>
       <div style="margin: 16px">
@@ -43,7 +51,9 @@
 
 <script>
 import { Toast } from 'vant'
-import { login } from '@/api/user'
+import { login, sendCode } from '@/api/user'
+import { mobileRules, codeRules } from './rules'
+
 export default {
   name: 'LoginPage',
   components: {},
@@ -53,7 +63,10 @@ export default {
       username: '',
       password: '',
       mobile: '',
-      code: ''
+      code: '',
+      mobileRules,
+      codeRules,
+      isShowDown: false
     }
   },
   computed: {},
@@ -71,8 +84,52 @@ export default {
       console.log('submit', values)
     },
     async login() {
-      const res = await login(this.mobile, this.code)
-      console.log(res)
+      //
+      this.$toast.loading({
+        message: '正在加载，不要着急哦~',
+        forbidClick: true
+      })
+      try {
+        const res = await login(this.mobile, this.code)
+        console.log(res)
+        this.$store.commit('setUser', res.data.data)
+        this.$router.push('/profile')
+        this.$toast.success('登录成功')
+      } catch (error) {
+        console.log(error)
+        // this.$toast.fail('登录失败')
+        const status = error.response.status
+        switch (status) {
+          case 400:
+            this.$toast.fail(error.response.data.message)
+            break
+          case 507:
+            this.$toast.fail('登录错误，请刷新')
+            break
+          default:
+            this.$toast.fail('登录错误，请刷新')
+            break
+        }
+      }
+    },
+    async SendCode() {
+      try {
+        await this.$refs.form.validate('mobile')
+        await sendCode(this.mobile)
+        this.isShowDown = true
+      } catch (error) {
+        if (!error.response) {
+          this.$toast.fail('手机号格式不正确')
+        } else {
+          const status = error.response.status
+          if (status === 404 || status === 429) {
+            this.$toast.fail('error.response.data.message')
+          }
+        }
+      }
+    },
+    increment() {
+      this.$store.commit('setNumber', 6666)
     }
   }
 }
@@ -84,7 +141,7 @@ export default {
     color: yellow;
   }
 }
-.form {
+.loginForm {
   :deep(.van-field__label) {
     flex: 1;
   }
