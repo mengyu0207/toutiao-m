@@ -93,11 +93,12 @@ export default {
         const res = await login(this.mobile, this.code)
         console.log(res)
         this.$store.commit('setUser', res.data.data)
-        this.$router.push('/profile')
+        this.$router.push('/')
         this.$toast.success('登录成功')
       } catch (error) {
         console.log(error)
-        // this.$toast.fail('登录失败')
+
+        this.$toast.fail('登录失败')
         const status = error.response.status
         switch (status) {
           case 400:

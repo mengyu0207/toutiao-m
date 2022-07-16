@@ -10,8 +10,27 @@ const routes = [
     component: () => import('@/views/login') // 路由懒加载，到那个页面加载那个页面
   },
   {
-    path: '/profile',
-    component: () => import('@/views/profile')
+    path: '/',
+    component: () => import('@/views/Layout'),
+    redirect: '/ ',
+    children: [
+      {
+        path: '/ ',
+        component: () => import('@/views/Home')
+      },
+      {
+        path: '/video',
+        component: () => import('@/views/Video')
+      },
+      {
+        path: '/my',
+        component: () => import('@/views/My')
+      },
+      {
+        path: '/qa',
+        component: () => import('@/views/My')
+      }
+    ]
   }
 ]
 
